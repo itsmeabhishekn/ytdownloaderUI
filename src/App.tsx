@@ -1,35 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import ThemeSwitcher from "./components/ThemeSwitcher";
+import Step1EnterDetails from "./components/Step1EnterDetails";
+import Step2SearchResults from "./components/Step2SearchResults";
+import Step3SelectFormat from "./components/Step3SelectFormat";
+import Step4Downloading from "./components/Step4Downloading";
+import Step5Complete from "./components/Step5Complete";
+import { ServerDetails, Video } from "./types";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [serverDetails, setServerDetails] = useState<ServerDetails>({
+    ip: "localhost",
+    port: "8000",
+  });
+  const [searchResults, setSearchResults] = useState<Video[]>([]);
+  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
+  const [downloadFormat, setDownloadFormat] = useState<string>("");
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="dark-theme min-h-screen p-6 text-white">
+      <ThemeSwitcher />
+      {currentStep === 1 && (
+        <Step1EnterDetails
+          setServerDetails={setServerDetails}
+          setCurrentStep={setCurrentStep}
+        />
+      )}
+      {currentStep === 2 && (
+        <Step2SearchResults
+          serverDetails={serverDetails}
+          setSearchResults={setSearchResults}
+          setSelectedVideo={setSelectedVideo}
+          setCurrentStep={setCurrentStep}
+        />
+      )}
+      {currentStep === 3 && selectedVideo && (
+        <Step3SelectFormat
+          selectedVideo={selectedVideo}
+          setDownloadFormat={setDownloadFormat}
+          setCurrentStep={setCurrentStep}
+        />
+      )}
+      {currentStep === 4 && selectedVideo && (
+        <Step4Downloading
+          serverDetails={serverDetails}
+          selectedVideo={selectedVideo}
+          downloadFormat={downloadFormat}
+          setCurrentStep={setCurrentStep}
+        />
+      )}
+      {currentStep === 5 && <Step5Complete setCurrentStep={setCurrentStep} />}
+    </div>
+  );
 }
 
-export default App
+export default App;
