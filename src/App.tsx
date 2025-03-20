@@ -5,7 +5,7 @@ import Step2SearchResults from "./components/Step2SearchResults";
 import Step3SelectFormat from "./components/Step3SelectFormat";
 import Step4Downloading from "./components/Step4Downloading";
 import Step5Complete from "./components/Step5Complete";
-import { ServerDetails, Video } from "./types";
+import { Video } from "./types";
 
 function App() {
   const [currentStep, setCurrentStep] = useState<number>(1);
