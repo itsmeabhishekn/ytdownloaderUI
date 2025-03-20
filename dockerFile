@@ -1,24 +1,24 @@
-# Use official Node.js image
-FROM node:18
+# Use Node.js for build step
+FROM node:18 AS builder
 
-# Set working directory inside the container
 WORKDIR /app
 
-# Copy app files into container
-COPY . .
-
-# Install dependencies
+# Copy package.json and install dependencies
+COPY package.json package-lock.json ./
 RUN npm install
 
-# Build the frontend
+# Copy rest of the frontend code
+COPY . .
+
+# Build the React app
 RUN npm run build
 
-# Use a lightweight web server to serve the built files
+# Use Nginx to serve built files
 FROM nginx:alpine
-COPY --from=0 /app/dist /usr/share/nginx/html
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Expose the default port for Nginx
+# Expose default Nginx port
 EXPOSE 80
 
-# Command to run Nginx
+# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
