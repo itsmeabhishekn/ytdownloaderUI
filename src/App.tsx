@@ -9,10 +9,10 @@ import { ServerDetails, Video } from "./types";
 
 function App() {
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const [serverDetails, setServerDetails] = useState<ServerDetails>({
-    ip: "localhost",
-    port: "8000",
-  });
+  // const [serverDetails, setServerDetails] = useState<ServerDetails>({
+  //   ip: "localhost",
+  //   port: "8000",
+  // });
   const [searchResults, setSearchResults] = useState<Video[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
   const [downloadFormat, setDownloadFormat] = useState<string>("");
@@ -22,18 +22,20 @@ function App() {
       <ThemeSwitcher />
       {currentStep === 1 && (
         <Step1EnterDetails
-          setServerDetails={setServerDetails}
+          setSelectedVideo={setSelectedVideo}
           setCurrentStep={setCurrentStep}
         />
       )}
       {currentStep === 2 && (
         <Step2SearchResults
-          serverDetails={serverDetails}
+          // serverDetails={serverDetails}
+          searchResults={searchResults} // ✅ Add this
           setSearchResults={setSearchResults}
           setSelectedVideo={setSelectedVideo}
           setCurrentStep={setCurrentStep}
         />
       )}
+
       {currentStep === 3 && selectedVideo && (
         <Step3SelectFormat
           selectedVideo={selectedVideo}
@@ -43,7 +45,7 @@ function App() {
       )}
       {currentStep === 4 && selectedVideo && (
         <Step4Downloading
-          serverDetails={serverDetails}
+          // serverDetails={serverDetails}
           selectedVideo={selectedVideo}
           downloadFormat={downloadFormat}
           setCurrentStep={setCurrentStep}

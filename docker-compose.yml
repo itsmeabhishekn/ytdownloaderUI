@@ -1,0 +1,13 @@
+version: "3"
+services:
+  ytdlpserver:
+    build: ./ytdlserver
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./ytdlserver/downloads:/app/downloads
+
+  ytdlfrontend:
+    build: ./ytdownloader
+    ports:
+      - "80:80"

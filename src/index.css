@@ -1,1 +1,29 @@
 @import "tailwindcss";
+
+/* Dark Theme */
+.dark {
+  background-color: #1a1a1a !important;
+  color: #f8f9fa !important;
+}
+
+/* Pastel Theme */
+.pastel {
+  background-color: #fce4ec !important;
+  color: #333 !important;
+}
+
+/* Cyberpunk Theme */
+.cyberpunk {
+  background-color: #0d0221 !important;
+  color: #0fffc1 !important;
+  text-shadow: 0 0 5px #0fffc1, 0 0 10px #0fffc1;
+}
+
+/* Extra Neon Effects */
+.border-neon-green {
+  border-color: #0fffc1 !important;
+}
+
+.bg-neon-green {
+  background-color: #0fffc1 !important;
+}

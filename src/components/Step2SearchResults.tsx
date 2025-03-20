@@ -1,42 +1,16 @@
-import { useState } from "react";
-import { SearchProps, Video } from "../types";
+import { Video, SearchProps } from "../types";
 
-const Step2SearchResults: React.FC<SearchProps> = ({
-  serverDetails,
-  setSearchResults,
-  setSelectedVideo,
+interface Step2SearchResultsProps extends SearchProps {
+  setSelectedVideo: (video: Video) => void;
+}
+
+const Step2SearchResults: React.FC<Step2SearchResultsProps> = ({
+  searchResults,
   setCurrentStep,
+  setSelectedVideo,
 }) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-  const [videos, setVideos] = useState<Video[]>([]);
-
-  const fetchResults = async () => {
-    setLoading(true);
-    setError("");
-
-    try {
-      const res = await fetch(
-        `http://${serverDetails.ip}:${serverDetails.port}/search?q=test`
-      );
-
-      if (!res.ok) {
-        throw new Error("Failed to fetch results");
-      }
-
-      const data: Video[] = await res.json();
-      setVideos(data);
-      setSearchResults(data);
-    } catch (err) {
-      setError("Could not fetch results. Please check the server connection.");
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleSelectVideo = (video: Video) => {
-    setSelectedVideo(video);
+    setSelectedVideo(video); // Store selected video
     setCurrentStep(3); // Move to Step 3 (Select Format)
   };
 
@@ -45,39 +19,32 @@ const Step2SearchResults: React.FC<SearchProps> = ({
       <div className="w-full max-w-md bg-gray-800 text-white p-6 rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold text-center mb-4">Search Results</h1>
 
-        {/* Load Results Button */}
-        <button
-          onClick={fetchResults}
-          className="w-full p-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded transition-all mb-4"
-        >
-          {loading ? "Loading..." : "Load Results"}
-        </button>
-
-        {/* Error Message */}
-        {error && <p className="text-red-400 text-sm text-center">{error}</p>}
-
-        {/* Loading Indicator */}
-        {loading && (
-          <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+        {/* No Results Message */}
+        {searchResults.length === 0 ? (
+          <p className="text-center text-gray-400">No results found.</p>
+        ) : (
+          <div className="space-y-2">
+            {searchResults.map((video) => (
+              <div
+                key={video.id}
+                className="p-3 bg-gray-700 hover:bg-gray-600 rounded-lg cursor-pointer transition-all flex items-center space-x-3"
+                onClick={() => handleSelectVideo(video)}
+              >
+                <img
+                  src={video.thumbnail}
+                  alt={video.title}
+                  className="w-16 h-16 rounded-lg object-cover"
+                />
+                <div className="flex-1 truncate">
+                  <p className="truncate">{video.title}</p>
+                </div>
+                <button className="px-3 py-1 bg-green-500 text-white text-sm rounded">
+                  Select
+                </button>
+              </div>
+            ))}
           </div>
         )}
-
-        {/* Search Results List */}
-        <div className="space-y-2">
-          {videos.map((video) => (
-            <div
-              key={video.id}
-              className="p-3 bg-gray-700 hover:bg-gray-600 rounded-lg cursor-pointer transition-all flex justify-between items-center"
-              onClick={() => handleSelectVideo(video)}
-            >
-              <span className="truncate">{video.title}</span>
-              <button className="px-3 py-1 bg-green-500 text-white text-sm rounded">
-                Select
-              </button>
-            </div>
-          ))}
-        </div>
 
         {/* Back Button */}
         <button

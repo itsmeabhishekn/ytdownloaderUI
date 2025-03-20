@@ -6,14 +6,17 @@ export interface ServerDetails {
 export interface Video {
   id: string;
   title: string;
+  thumbnail: string;
 }
 
 export interface StepProps {
   setCurrentStep: (step: number) => void;
+  // setSelectedVideo: (video: Video) => void;
 }
 
 export interface SearchProps extends StepProps {
-  serverDetails: ServerDetails;
+  // serverDetails: ServerDetails;
+  searchResults: Video[]; // Add this
   setSearchResults: (results: Video[]) => void;
   setSelectedVideo: (video: Video) => void;
 }
@@ -24,7 +27,7 @@ export interface FormatProps extends StepProps {
 }
 
 export interface DownloadProps extends StepProps {
-  serverDetails: ServerDetails;
+  // serverDetails: ServerDetails;
   selectedVideo: Video;
   downloadFormat: string;
 }
